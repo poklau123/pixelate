@@ -176,7 +176,12 @@ bool ouputIndexMatrix(String filename, vector<vector<uint>> matrix)
 			}
 			fout << *j;
 		}
-		fout << "]," << endl;
+		fout << "]";
+		if(i+1 != matrix.end())
+		{
+			fout << ',';
+		}
+		fout << endl;
 	}
 	fout << ']' << endl;
 	fout.close();
