@@ -10,8 +10,8 @@ function drawPixel() {
             var pixelData = place.canvasController.ctx.getImageData(pointX, pointY, 1, 1);
             var hexColor = rgbToHex(pixelData.data[0], pixelData.data[1], pixelData.data[2]).toUpperCase();
             var index = place.DEFAULT_COLOURS.indexOf(hexColor);
-            if (matrix[i][j] != index) {
-                var color = matrix[i][j];
+            if (matrix[j][i] != index) {
+                var color = matrix[j][i];
                 place.selectedColour = color;
                 place.canvasClicked(pointX, pointY);
                 console.log('pixel point('+pointX+','+pointY+') with color index:'+color);
@@ -43,6 +43,9 @@ Object.defineProperty(place, "unlockTime", {
                 }
             }catch(e){
                 console.warn(e);
+                setTimeout(function(){
+                    place.unlockTime = null;
+                },5000);
             }
         }
     },
@@ -54,6 +57,14 @@ Object.defineProperty(place, "unlockTime", {
 window.alert = function(v){
 console.warn(v);
 }
+// 错误时比如429后隔一段时间重试
+$.ajaxSetup({
+    error:function(){
+        setTimeout(function(){
+            place.unlockTime = null;
+        },5000);
+    }
+});
 
 place.canvasClicked(startX,startY);
 place.unlockTime = null;
