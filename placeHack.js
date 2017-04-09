@@ -1,4 +1,4 @@
-var matrix = [];
+var matrix = []; //timg.json
 var startX = 0,
     startY = 0;
 
@@ -50,4 +50,10 @@ Object.defineProperty(place, "unlockTime", {
         return unlockTime;
     }
 });
+//防止alert中断
+window.alert = function(v){
+console.warn(v);
+}
+
 place.canvasClicked(startX,startY);
+place.unlockTime = null;
