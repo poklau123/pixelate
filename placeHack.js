@@ -3,6 +3,7 @@ var startX = 0,
     startY = 0;
 
 function drawPixel() {
+    var stack = [];
     for (j = 0; j < matrix.length; j++) {
         for (i = 0; i < matrix[j].length; i++) {
             var pointX = startX + i,
@@ -11,15 +12,26 @@ function drawPixel() {
             var hexColor = rgbToHex(pixelData.data[0], pixelData.data[1], pixelData.data[2]).toUpperCase();
             var index = place.DEFAULT_COLOURS.indexOf(hexColor);
             if (matrix[j][i] != index) {
-                var color = matrix[j][i];
-                place.selectedColour = color;
-                place.canvasClicked(pointX, pointY);
-                console.log('pixel point('+pointX+','+pointY+') with color index:'+color);
-                return true;
+                stack.push({i:i,j:j});
             }
         }
     }
-    return false;
+    if(stack.length > 0){
+        var select = stack[Math.floor(Math.random()*stack.length)];
+        var i = select.i,
+            j = select.j;
+        var pointX = startX + i,
+            pointY = startY + j;
+        var color = matrix[j][i];
+        place.selectedColour = null;
+        place.canvasClicked(pointX, pointY);
+        place.selectedColour = color;
+        place.canvasClicked(pointX, pointY);
+        console.log('pixel point('+pointX+','+pointY+') with color index:'+color);
+        return true;
+    }else{
+        return false;
+    }
 }
 
 /*RGB颜色转换为16进制*/
